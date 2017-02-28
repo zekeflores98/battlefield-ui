@@ -1,9 +1,7 @@
 package io.map.battleship.ui.views;
 
-import io.map.battleship.ui.BattleshipView;
-import io.map.battleship.ui.BattleshipWindow;
-import io.map.battleship.ui.game.Board;
-import io.map.battleship.ui.game.BoardContainer;
+import io.map.battleship.ui.game.board.Board;
+import io.map.battleship.ui.game.board.BoardContainer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,68 +19,92 @@ import javax.swing.JPanel;
  * @author bmdelacruz
  */
 public class GameView extends BattleshipView {
-    
-    private final BattleshipWindow window;
-    private Board primaryBoard, secondaryBoard;
     private JPanel primaryBoardContainer, secondaryBoardContainer;
+    private JLabel lblPrimBoard;
+    private JLabel lblSecBoard;
+    private JLabel lblHeader;
     
-    // TODO: Create a panel to be set with a preferred size instead of
-    // setting the preferred size of the board.
-    // TODO: Switch boards
-    
-    public GameView(BattleshipWindow window) {
+    public GameView() {
         super();
-        this.window = window;
-        this.primaryBoard = new Board();
-        this.secondaryBoard = new Board();
+        primaryBoard = new Board();
+        secondaryBoard = new Board();
         
-        initializeComponents(window);
+        initializeComponents();
     }
     
-    public GameView(BattleshipWindow window, Board primaryBoard, Board secondaryBoard) {
-        super();
-        this.window = window;
-        this.primaryBoard = primaryBoard;
-        this.secondaryBoard = secondaryBoard;
+    public GameView(Board primaryBoard, Board secondaryBoard) {
+        super(primaryBoard, secondaryBoard);
         
-        initializeComponents(window);
-    }
-
-    public Board getPrimaryBoard() {
-        return primaryBoard;
-    }
-
-    public Board getSecondaryBoard() {
-        return secondaryBoard;
+        initializeComponents();
     }
     
-    public void switchBoards() {
-        BoardContainer pbc = (BoardContainer) primaryBoardContainer.getComponent(0);
-        BoardContainer sbc = (BoardContainer) secondaryBoardContainer.getComponent(0);
-        
-        primaryBoardContainer.add(sbc);
-        secondaryBoardContainer.add(pbc);
+    public void setHeaderLabel(String text) {
+        lblHeader.setText(text);
+    }
+    
+    public void setPrimaryBoardLabel(String text) {
+        lblPrimBoard.setText(text);
+    }
+    
+    public void setSecondaryBoardLabel(String text) {
+        lblSecBoard.setText(text);
     }
 
-    private void initializeComponents(BattleshipWindow window) {
+    @Override
+    public int getType() {
+        return BattleshipView.GAME_VIEW;
+    }
+
+    @Override
+    public void setModeOfBoards() {
+        if (primaryBoard != null) {
+            primaryBoard.setMode(Board.GAME_MODE);
+                
+        }
+        if (secondaryBoard != null) {
+            secondaryBoard.setMode(Board.OWNER_MODE);
+        }
+    }
+
+    private void initializeComponents() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setParentWindow(window);
         setOpaque(false);
-        
-        primaryBoardContainer = new JPanel(new BorderLayout());
-        primaryBoardContainer.setBackground(Color.GRAY);
-        primaryBoardContainer.setPreferredSize(new Dimension(600, 600));
-        add(primaryBoardContainer);
-        
-        // primary board ========================================
-        BoardContainer pbContainer = primaryBoard.getContainer();
-        primaryBoardContainer.add(pbContainer, BorderLayout.CENTER);
         
         GridBagConstraints constr = new GridBagConstraints();
         constr.fill = GridBagConstraints.HORIZONTAL;
         constr.anchor = GridBagConstraints.NORTH;
         constr.weightx = 1.0;
         constr.weighty = 1.0;
+        
+        // game panel ======================================
+        JPanel gamePanel = new JPanel();
+        gamePanel.setOpaque(false);
+        gamePanel.setLayout(new GridBagLayout());
+        add(gamePanel);
+        
+        // primary board label =========================================
+        lblPrimBoard = new JLabel("[LBL_PRIMARY_BOARD]"); 
+        lblPrimBoard.setForeground(Color.WHITE);
+        lblPrimBoard.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        
+        Font lblPrimBoardFont = new Font(Font.MONOSPACED, Font.BOLD, 14);
+        lblPrimBoard.setFont(lblPrimBoardFont);
+        
+        constr.gridx = 0;
+        constr.gridy = 0;
+        gamePanel.add(lblPrimBoard, constr);
+        
+        // primary board ========================================
+        primaryBoardContainer = new JPanel(new BorderLayout());
+        primaryBoardContainer.setBackground(Color.GRAY);
+        primaryBoardContainer.setPreferredSize(new Dimension(600, 600));
+        
+        constr.gridx = 0;
+        constr.gridy = 1;
+        gamePanel.add(primaryBoardContainer, constr);
+        
+        BoardContainer pbContainer = primaryBoard.getContainer();
+        primaryBoardContainer.add(pbContainer, BorderLayout.CENTER);
         
         // game info panel ======================================
         JPanel gameInfoPanel = new JPanel();
@@ -98,7 +120,7 @@ public class GameView extends BattleshipView {
         gameInfoPanel.add(gameInfoStickyPanel, constr);
         
         // header label =========================================
-        JLabel lblHeader = new JLabel("Battleship"); 
+        lblHeader = new JLabel("[LBL_HEADER]"); 
         lblHeader.setForeground(Color.WHITE);
         
         Font lblHeaderFont = new Font(Font.MONOSPACED, Font.BOLD, 24);
@@ -109,7 +131,7 @@ public class GameView extends BattleshipView {
         gameInfoStickyPanel.add(lblHeader, constr);
         
         // secondary board label ================================
-        JLabel lblSecBoard = new JLabel("Your fleet"); 
+        lblSecBoard = new JLabel("[LBL_SECONDARY_BOARD]"); 
         lblSecBoard.setForeground(Color.WHITE);
         lblSecBoard.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 0));
         

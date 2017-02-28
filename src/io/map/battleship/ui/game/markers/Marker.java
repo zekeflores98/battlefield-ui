@@ -1,5 +1,6 @@
-package io.map.battleship.ui.game;
+package io.map.battleship.ui.game.markers;
 
+import io.map.battleship.ui.game.board.Board;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,6 +34,15 @@ public abstract class Marker {
     public void setY(int y) {
         this.y = y;
     }
+    
+    public void setLocation(int x, int y) {
+        setX(x);
+        setY(y);
+    }
+
+    public int getType() {
+        return type;
+    }
 
     public void setType(int type) {
         this.type = type;
@@ -43,8 +53,12 @@ public abstract class Marker {
         
         int width = board.getContainer().getGridBlockWidth();
         int height = board.getContainer().getGridBlockHeight();
+        int offsetWidth = board.getContainer().getGridBlockWidth() / 3;
+        int offsetHeight = board.getContainer().getGridBlockHeight() / 3;
         int x = (this.x) * width;
         int y = (this.y) * height;
+        int offsetX = x + offsetWidth;
+        int offsetY = y + offsetHeight;
         
         if (type == HIT_MARKER) {
             g2.setPaint(Color.RED);
@@ -53,6 +67,6 @@ public abstract class Marker {
         } else {
             g2.setPaint(Color.PINK);
         }
-        g2.fillRect(x, y, width, height);
+        g2.fillRect(offsetX, offsetY, offsetWidth, offsetHeight);
     }
 }

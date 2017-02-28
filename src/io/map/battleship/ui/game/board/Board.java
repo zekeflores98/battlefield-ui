@@ -1,5 +1,8 @@
-package io.map.battleship.ui.game;
+package io.map.battleship.ui.game.board;
 
+import io.map.battleship.ui.BattleshipGame;
+import io.map.battleship.ui.game.markers.Marker;
+import io.map.battleship.ui.game.ships.Ship;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,8 @@ public class Board {
     private final int maxY;
 
     private int mode;
+    private int prevMode;
+    private BattleshipGame game;
 
     public Board() {
         this.maxX = DEFAULT_DIVISIONS;
@@ -52,12 +57,24 @@ public class Board {
         return container;
     }
 
+    public BattleshipGame getGame() {
+        return game;
+    }
+    
+    public void setGame(BattleshipGame game) {
+        this.game = game;
+    }
+
+    public int getPrevMode() {
+        return prevMode;
+    }
+
     public final int getMode() {
         return mode;
     }
 
     public final void setMode(int mode) {
-        int prevMode = this.mode;
+        prevMode = this.mode;
 
         this.mode = mode;
         container.setMode(mode);

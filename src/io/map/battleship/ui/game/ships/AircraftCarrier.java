@@ -1,9 +1,8 @@
-package io.map.battleship.ui.game;
+package io.map.battleship.ui.game.ships;
 
+import io.map.battleship.ui.game.board.Board;
 import io.map.battleship.ui.utils.ColorUtils;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 public class AircraftCarrier extends Ship {
 

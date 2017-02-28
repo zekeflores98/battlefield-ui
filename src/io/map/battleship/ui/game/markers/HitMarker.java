@@ -1,5 +1,6 @@
-package io.map.battleship.ui.game;
+package io.map.battleship.ui.game.markers;
 
+import io.map.battleship.ui.game.board.Board;
 import java.awt.Graphics;
 
 public class HitMarker extends Marker {
