@@ -96,11 +96,25 @@ public abstract class Ship {
 
         if (orientation == ORIENTATION_HORIZONTAL) {
             if ((this.x + length) > board.getMaxX()) {
-                this.x = board.getMaxX() - length;
+                if(getOccupiedBlocks().contains(new Point(board.getMaxX() - length,y))){
+                    setIsOverlapping(true);
+                }
+                else
+                    this.x = board.getMaxX() - length;
+            }
+            if ((this.y + length) > board.getMaxY()) {
+                this.y = board.getMaxY() - length;
             }
         } else if (orientation == ORIENTATION_VERTICAL) {
             if ((this.x + 1) > board.getMaxX()) {
                 this.x = board.getMaxX() - 1;
+            }
+            if ((this.y + length) > board.getMaxY()) {
+                if(getOccupiedBlocks().contains(new Point(board.getMaxX() - length,y))){
+                    setIsOverlapping(true);
+                }
+                else
+                    this.y = board.getMaxY() - length;
             }
         } else {
             throw new AssertionError();
